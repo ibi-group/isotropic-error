@@ -9,6 +9,7 @@
         ],
         "sourceMaps": "inline"
     },
+    "bugs": "https://github.com/ibi-group/isotropic-error/issues",
     "contributors": [
         "Duane Sibilly <duane.sibilly@ibigroup.com>"
     ],
@@ -46,9 +47,11 @@
         },
         "root": true
     },
+    "homepage": "https://github.com/ibi-group/isotropic-error",
     "license": "BSD-3-Clause",
     "main": "lib/error.js",
     "name": "isotropic-error",
+    "repository": "ibi-group/isotropic-error",
     "scripts": {
         "build": "babel js -d lib",
         "lint": "eslint js test",

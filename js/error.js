@@ -82,7 +82,9 @@ const _Error = _make(Error, {
                 value: name
             },
             _nativeGetStack: {
-                value: nativeError ? () => nativeError.stack : Reflect.getOwnPropertyDescriptor(this, 'stack').get
+                value: nativeError ?
+                    () => nativeError.stack :
+                    Reflect.getOwnPropertyDescriptor(this, 'stack').get
             },
             _stack: {
                 writable: true

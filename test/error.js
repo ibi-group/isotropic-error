@@ -15,9 +15,9 @@ import {
 
 const NativeError = Error;
 
-/* eslint-disable no-native-reassign, no-undef */
+/* eslint-disable no-global-assign, no-undef */
 Error = e;
-/* eslint-enable no-native-reassign, no-undef */
+/* eslint-enable no-global-assign, no-undef */
 
 describe('Error', () => {
     it('should construct error objects', () => {

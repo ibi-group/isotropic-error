@@ -27,7 +27,7 @@ const _Error = _make(Error, {
             const prepareStackTrace = Error.prepareStackTrace;
 
             Error.prepareStackTrace = _Error._prepareStackTrace;
-            this._stack += `\n${this._nativeGetStack()}`;
+            this._stack += `\n${this._getInternalStack()}`;
             Error.prepareStackTrace = prepareStackTrace;
 
             if (this.error) {
@@ -43,15 +43,16 @@ const _Error = _make(Error, {
         message,
         name
     } = {}) {
-        let nativeError;
+        let internalError;
 
         if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, _Error);
+            internalError = {};
+            Error.captureStackTrace(internalError, _Error);
         } else {
             try {
                 throw new Error();
             } catch (error) {
-                nativeError = error;
+                internalError = error;
             }
         }
 
@@ -75,16 +76,14 @@ const _Error = _make(Error, {
             stack: {
                 get: this._getStack
             },
+            _getInternalStack: {
+                value: () => internalError.stack
+            },
             _message: {
                 value: message
             },
             _name: {
                 value: name
-            },
-            _nativeGetStack: {
-                value: nativeError ?
-                    () => nativeError.stack :
-                    Reflect.getOwnPropertyDescriptor(this, 'stack').get
             },
             _stack: {
                 writable: true

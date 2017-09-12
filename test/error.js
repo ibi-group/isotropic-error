@@ -1,238 +1,221 @@
-import {
-    describe,
-    it
-} from 'mocha';
+import _chai from 'chai';
+import _Error from '../js/error.js';
+import _mocha from 'mocha';
 
-// Normally this would be
-// import Error from '../js/error.js'
-// but these tests need a reference to the native Error object
-// eslint complains about this workaround
-import e from '../js/error.js';
+_mocha.describe('Error', () => {
+    _mocha.it('should construct error objects', () => {
+        _chai.expect(_Error).to.be.a('function');
+        _chai.expect(_Error).to.have.property('super_', Error);
+        _chai.expect(_Error).to.have.property('superclass', Error.prototype);
 
-import {
-    expect
-} from 'chai';
+        const error = new _Error();
 
-const NativeError = Error;
-
-/* eslint-disable no-global-assign, no-undef */
-Error = e;
-/* eslint-enable no-global-assign, no-undef */
-
-describe('Error', () => {
-    it('should construct error objects', () => {
-        expect(Error).to.be.a('function');
-        expect(Error).to.have.property('super_', NativeError);
-        expect(Error).to.have.property('superclass', NativeError.prototype);
-
-        const error = new Error();
-
-        expect(error).to.be.an.instanceOf(Error);
-        expect(error).to.be.an.instanceOf(NativeError);
+        _chai.expect(error).to.be.an.instanceOf(_Error);
+        _chai.expect(error).to.be.an.instanceOf(Error);
     });
 
-    it('should be an error object factory', () => {
-        expect(Error).to.be.a('function');
-        expect(Error).to.have.property('super_', NativeError);
-        expect(Error).to.have.property('superclass', NativeError.prototype);
+    _mocha.it('should be an error object factory', () => {
+        _chai.expect(_Error).to.be.a('function');
+        _chai.expect(_Error).to.have.property('super_', Error);
+        _chai.expect(_Error).to.have.property('superclass', Error.prototype);
 
-        const error = Error();
+        const error = _Error();
 
-        expect(error).to.be.an.instanceOf(Error);
-        expect(error).to.be.an.instanceOf(NativeError);
+        _chai.expect(error).to.be.an.instanceOf(_Error);
+        _chai.expect(error).to.be.an.instanceOf(Error);
     });
 
-    describe('#details', () => {
-        it('should be an instance property', () => {
-            expect(Error({
+    _mocha.describe('#details', () => {
+        _mocha.it('should be an instance property', () => {
+            _chai.expect(_Error({
                 details: 'test details'
             })).to.have.property('details', 'test details');
         });
 
-        it('should not be writable', () => {
-            const error = Error({
+        _mocha.it('should not be writable', () => {
+            const error = _Error({
                 details: 'test details'
             });
 
-            expect(() => {
+            _chai.expect(() => {
                 error.details = 'new details';
-            }).to.throw(NativeError);
+            }).to.throw();
         });
 
-        it('should be undefined if not provided', () => {
-            expect(Error().details).to.be.undefined;
+        _mocha.it('should be undefined if not provided', () => {
+            _chai.expect(_Error().details).to.be.undefined;
         });
     });
 
-    describe('#error', () => {
-        it('should be an instance property', () => {
-            const error = Error();
+    _mocha.describe('#error', () => {
+        _mocha.it('should be an instance property', () => {
+            const error = _Error();
 
-            expect(Error({
+            _chai.expect(_Error({
                 error
             })).to.have.property('error', error);
         });
 
-        it('should not be writable', () => {
-            const error = Error({
-                error: Error()
+        _mocha.it('should not be writable', () => {
+            const error = _Error({
+                error: _Error()
             });
 
-            expect(() => {
-                error.error = Error();
-            }).to.throw(NativeError);
+            _chai.expect(() => {
+                error.error = _Error();
+            }).to.throw();
         });
 
-        it('should be undefined if not provided', () => {
-            expect(Error().error).to.be.undefined;
+        _mocha.it('should be undefined if not provided', () => {
+            _chai.expect(_Error().error).to.be.undefined;
         });
     });
 
-    describe('#message', () => {
-        it('should be an instance property', () => {
-            expect(Error({
+    _mocha.describe('#message', () => {
+        _mocha.it('should be an instance property', () => {
+            _chai.expect(_Error({
                 message: 'test error message'
             })).to.have.property('message', 'test error message');
         });
 
-        it('should not be writable', () => {
-            const error = Error({
+        _mocha.it('should not be writable', () => {
+            const error = _Error({
                 message: 'test error message'
             });
 
-            expect(() => {
+            _chai.expect(() => {
                 error.message = 'new error message';
-            }).to.throw(NativeError);
+            }).to.throw();
         });
 
-        it('should come from inner error if not provided', () => {
-            expect(Error({
-                error: Error({
+        _mocha.it('should come from inner error if not provided', () => {
+            _chai.expect(_Error({
+                error: _Error({
                     message: 'test inner error message'
                 })
             })).to.have.property('message', 'test inner error message');
         });
 
-        it('should come from native inner error if not provided', () => {
-            expect(Error({
-                error: new NativeError('test native inner error message')
+        _mocha.it('should come from native inner error if not provided', () => {
+            _chai.expect(_Error({
+                error: new Error('test native inner error message')
             })).to.have.property('message', 'test native inner error message');
         });
 
-        it('should be undefined if not provided', () => {
-            expect(Error().message).to.be.undefined;
+        _mocha.it('should be undefined if not provided', () => {
+            _chai.expect(_Error().message).to.be.undefined;
         });
     });
 
-    describe('#name', () => {
-        it('should be an instance property', () => {
-            expect(Error({
+    _mocha.describe('#name', () => {
+        _mocha.it('should be an instance property', () => {
+            _chai.expect(_Error({
                 name: 'TestErrorName'
             })).to.have.property('name', 'TestErrorName');
         });
 
-        it('should not be writable', () => {
-            const error = Error({
+        _mocha.it('should not be writable', () => {
+            const error = _Error({
                 name: 'TestErrorName'
             });
 
-            expect(() => {
+            _chai.expect(() => {
                 error.name = 'NewErrorName';
-            }).to.throw(NativeError);
+            }).to.throw();
         });
 
-        it('should come from inner error if not provided', () => {
-            expect(Error({
-                error: Error({
+        _mocha.it('should come from inner error if not provided', () => {
+            _chai.expect(_Error({
+                error: _Error({
                     name: 'TestInnerErrorName'
                 })
             })).to.have.property('name', 'TestInnerErrorName');
         });
 
-        it('should come from native inner error if not provided', () => {
-            const error = new NativeError();
+        _mocha.it('should come from native inner error if not provided', () => {
+            const error = new Error();
 
             error.name = 'TestNativeInnerErrorName';
 
-            expect(Error({
+            _chai.expect(_Error({
                 error
             })).to.have.property('name', 'TestNativeInnerErrorName');
         });
 
-        it('should be undefined if not provided', () => {
-            expect(Error().name).to.be.undefined;
+        _mocha.it('should be undefined if not provided', () => {
+            _chai.expect(_Error().name).to.be.undefined;
         });
     });
 
-    describe('#stack', () => {
-        it('should be a string', () => {
-            expect(Error()).to.have.property('stack').that.is.a('string');
+    _mocha.describe('#stack', () => {
+        _mocha.it('should be a string', () => {
+            _chai.expect(_Error()).to.have.property('stack').that.is.a('string');
         });
 
-        it('should be cached', () => {
-            const error = Error();
+        _mocha.it('should be cached', () => {
+            const error = _Error();
 
-            expect(error._stack).to.be.undefined;
+            _chai.expect(error._stack).to.be.undefined;
             error._stack = 'fake stack';
-            expect(error).to.have.property('stack', 'fake stack');
+            _chai.expect(error).to.have.property('stack', 'fake stack');
         });
 
-        it('should include details', () => {
-            expect(Error({
+        _mocha.it('should include details', () => {
+            _chai.expect(_Error({
                 details: {
                     test: 'details'
                 }
             })).to.have.property('stack').that.matches(/\nDetails: {\n {4}"test": "details"\n}/);
         });
 
-        it('should include inner error', () => {
-            expect(Error({
-                error: Error()
+        _mocha.it('should include inner error', () => {
+            _chai.expect(_Error({
+                error: _Error()
             })).to.have.property('stack').that.matches(/\n-> Error/);
         });
 
-        it('should include inner error string', () => {
-            expect(Error({
+        _mocha.it('should include inner error string', () => {
+            _chai.expect(_Error({
                 error: 'inner error string'
             })).to.have.property('stack').that.matches(/\n-> inner error string/);
         });
 
-        it('should work without the v8 stack trace api', () => {
-            const captureStackTrace = NativeError.captureStackTrace;
+        _mocha.it('should work without the v8 stack trace api', () => {
+            const captureStackTrace = Error.captureStackTrace;
 
-            NativeError.captureStackTrace = null;
-            expect(Error()).to.have.property('stack').that.is.a('string');
-            NativeError.captureStackTrace = captureStackTrace;
+            Error.captureStackTrace = null;
+            _chai.expect(_Error()).to.have.property('stack').that.is.a('string');
+            Error.captureStackTrace = captureStackTrace;
         });
     });
 
-    describe('#toString', () => {
-        it('should print "name: message"', () => {
-            expect(Error({
+    _mocha.describe('#toString', () => {
+        _mocha.it('should print "name: message"', () => {
+            _chai.expect(_Error({
                 message: 'test error message',
                 name: 'TestErrorName'
             }).toString()).to.equal('TestErrorName: test error message');
         });
 
-        it('should print "Error: message" when name is not provided', () => {
-            expect(Error({
+        _mocha.it('should print "Error: message" when name is not provided', () => {
+            _chai.expect(_Error({
                 message: 'test error message'
             }).toString()).to.equal('Error: test error message');
         });
 
-        it('should print "name" when message is not provided', () => {
-            expect(Error({
+        _mocha.it('should print "name" when message is not provided', () => {
+            _chai.expect(_Error({
                 name: 'TestErrorName'
             }).toString()).to.equal('TestErrorName');
         });
 
-        it('should print "Error" when message and name are not provided', () => {
-            expect(Error().toString()).to.equal('Error');
+        _mocha.it('should print "Error" when message and name are not provided', () => {
+            _chai.expect(_Error().toString()).to.equal('Error');
         });
 
-        it('should print "name: message" from the inner error when message and name are not provided', () => {
-            expect(Error({
-                error: Error({
+        _mocha.it('should print "name: message" from the inner error when message and name are not provided', () => {
+            _chai.expect(_Error({
+                error: _Error({
                     message: 'test error message',
                     name: 'TestErrorName'
                 })
@@ -240,26 +223,26 @@ describe('Error', () => {
         });
     });
 
-    describe('._prepareStackTrace', () => {
-        it('should return a string representation of a structured stack trace', () => {
+    _mocha.describe('._prepareStackTrace', () => {
+        _mocha.it('should return a string representation of a structured stack trace', () => {
             // Use strings instead of trying to make a structured stack trace in non-v8 environments
-            expect(Error._prepareStackTrace({}, [
+            _chai.expect(_Error._prepareStackTrace({}, [
                 'line 0',
                 'line 1',
                 'line 2'
             ])).to.equal('    at line 0\n    at line 1\n    at line 2');
         });
 
-        it('should print the error if it can not stringify the call site object', () => {
+        _mocha.it('should print the error if it can not stringify the call site object', () => {
             // Use strings instead of trying to make a structured stack trace in non-v8 environments
-            expect(Error._prepareStackTrace({}, [
+            _chai.expect(_Error._prepareStackTrace({}, [
                 'line 0',
                 null,
                 'line 2'
             ])).to.match(/^ {4}at line 0\n {4}at <error: .*?>\n {4}at line 2$/);
         });
 
-        it('should print "<error>" if it can not stringify the call site object or the thrown error', () => {
+        _mocha.it('should print "<error>" if it can not stringify the call site object or the thrown error', () => {
             const nonStringError = {
                 toString () {
                     throw nonStringError;
@@ -267,7 +250,7 @@ describe('Error', () => {
             };
 
             // Use strings instead of trying to make a structured stack trace in non-v8 environments
-            expect(Error._prepareStackTrace({}, [
+            _chai.expect(_Error._prepareStackTrace({}, [
                 'line 0',
                 nonStringError,
                 'line 2'

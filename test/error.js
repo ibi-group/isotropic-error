@@ -165,19 +165,19 @@ _mocha.describe('Error', () => {
                 details: {
                     test: 'details'
                 }
-            })).to.have.property('stack').that.matches(/\nDetails: {\n {4}"test": "details"\n}/);
+            })).to.have.property('stack').that.matches(/\nDetails: \{\n {4}"test": "details"\n\}/u);
         });
 
         _mocha.it('should include inner error', () => {
             _chai.expect(_Error({
                 error: _Error()
-            })).to.have.property('stack').that.matches(/\n-> Error/);
+            })).to.have.property('stack').that.matches(/\n-> Error/u);
         });
 
         _mocha.it('should include inner error string', () => {
             _chai.expect(_Error({
                 error: 'inner error string'
-            })).to.have.property('stack').that.matches(/\n-> inner error string/);
+            })).to.have.property('stack').that.matches(/\n-> inner error string/u);
         });
 
         _mocha.it('should work without the v8 stack trace api', () => {
@@ -239,7 +239,7 @@ _mocha.describe('Error', () => {
                 'line 0',
                 null,
                 'line 2'
-            ])).to.match(/^ {4}at line 0\n {4}at <error: .*?>\n {4}at line 2$/);
+            ])).to.match(/^ {4}at line 0\n {4}at <error: .*?>\n {4}at line 2$/u);
         });
 
         _mocha.it('should print "<error>" if it can not stringify the call site object or the thrown error', () => {

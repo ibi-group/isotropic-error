@@ -1,6 +1,6 @@
 import _make from 'isotropic-make';
 
-const _Error = _make(Error, {
+const _Error = _make(Error, { // eslint-disable-line no-restricted-globals
     toString () {
         let string = this.name || 'Error';
 
@@ -24,11 +24,11 @@ const _Error = _make(Error, {
                 this._stack += `\nDetails: ${JSON.stringify(this.details, null, 4)}`;
             }
 
-            const prepareStackTrace = Error.prepareStackTrace;
+            const prepareStackTrace = Error.prepareStackTrace; // eslint-disable-line no-restricted-globals
 
-            Error.prepareStackTrace = _Error._prepareStackTrace;
+            Error.prepareStackTrace = _Error._prepareStackTrace; // eslint-disable-line no-restricted-globals
             this._stack += `\n${this._getInternalStack()}`;
-            Error.prepareStackTrace = prepareStackTrace;
+            Error.prepareStackTrace = prepareStackTrace; // eslint-disable-line no-restricted-globals
 
             if (this.error) {
                 this._stack += `\n-> ${this.error.stack || this.error}`;
@@ -45,12 +45,12 @@ const _Error = _make(Error, {
     } = {}) {
         let internalError;
 
-        if (Error.captureStackTrace) {
+        if (Error.captureStackTrace) { // eslint-disable-line no-restricted-globals
             internalError = {};
-            Error.captureStackTrace(internalError, _Error);
+            Error.captureStackTrace(internalError, _Error); // eslint-disable-line no-restricted-globals
         } else {
             try {
-                throw new Error();
+                throw new Error(); // eslint-disable-line no-restricted-globals
             } catch (error) {
                 internalError = error;
             }

@@ -5,24 +5,24 @@ import _mocha from 'mocha';
 _mocha.describe('Error', () => {
     _mocha.it('should construct error objects', () => {
         _chai.expect(_Error).to.be.a('function');
-        _chai.expect(_Error).to.have.property('super_', Error);
-        _chai.expect(_Error).to.have.property('superclass', Error.prototype);
+        _chai.expect(_Error).to.have.property('super_', Error); // eslint-disable-line no-restricted-globals
+        _chai.expect(_Error).to.have.property('superclass', Error.prototype); // eslint-disable-line no-restricted-globals
 
         const error = new _Error();
 
         _chai.expect(error).to.be.an.instanceOf(_Error);
-        _chai.expect(error).to.be.an.instanceOf(Error);
+        _chai.expect(error).to.be.an.instanceOf(Error); // eslint-disable-line no-restricted-globals
     });
 
     _mocha.it('should be an error object factory', () => {
         _chai.expect(_Error).to.be.a('function');
-        _chai.expect(_Error).to.have.property('super_', Error);
-        _chai.expect(_Error).to.have.property('superclass', Error.prototype);
+        _chai.expect(_Error).to.have.property('super_', Error); // eslint-disable-line no-restricted-globals
+        _chai.expect(_Error).to.have.property('superclass', Error.prototype); // eslint-disable-line no-restricted-globals
 
         const error = _Error();
 
         _chai.expect(error).to.be.an.instanceOf(_Error);
-        _chai.expect(error).to.be.an.instanceOf(Error);
+        _chai.expect(error).to.be.an.instanceOf(Error); // eslint-disable-line no-restricted-globals
     });
 
     _mocha.describe('#details', () => {
@@ -98,7 +98,7 @@ _mocha.describe('Error', () => {
 
         _mocha.it('should come from native inner error if not provided', () => {
             _chai.expect(_Error({
-                error: new Error('test native inner error message')
+                error: new Error('test native inner error message') // eslint-disable-line no-restricted-globals
             })).to.have.property('message', 'test native inner error message');
         });
 
@@ -133,7 +133,7 @@ _mocha.describe('Error', () => {
         });
 
         _mocha.it('should come from native inner error if not provided', () => {
-            const error = new Error();
+            const error = new Error(); // eslint-disable-line no-restricted-globals
 
             error.name = 'TestNativeInnerErrorName';
 
@@ -181,11 +181,11 @@ _mocha.describe('Error', () => {
         });
 
         _mocha.it('should work without the v8 stack trace api', () => {
-            const captureStackTrace = Error.captureStackTrace;
+            const captureStackTrace = Error.captureStackTrace; // eslint-disable-line no-restricted-globals
 
-            Error.captureStackTrace = null;
+            Error.captureStackTrace = null; // eslint-disable-line no-restricted-globals
             _chai.expect(_Error()).to.have.property('stack').that.is.a('string');
-            Error.captureStackTrace = captureStackTrace;
+            Error.captureStackTrace = captureStackTrace; // eslint-disable-line no-restricted-globals
         });
     });
 

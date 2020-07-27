@@ -1,6 +1,6 @@
 import _make from 'isotropic-make';
 
-const _Error = _make(Error, { // eslint-disable-line no-restricted-globals
+const _Error = _make(Error, { // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
     toString () {
         let string = this.name || 'Error';
 
@@ -24,11 +24,11 @@ const _Error = _make(Error, { // eslint-disable-line no-restricted-globals
                 this._stack += `\nDetails: ${JSON.stringify(this.details, null, 4)}`;
             }
 
-            const prepareStackTrace = Error.prepareStackTrace; // eslint-disable-line no-restricted-globals
+            const prepareStackTrace = Error.prepareStackTrace; // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
 
-            Error.prepareStackTrace = _Error._prepareStackTrace; // eslint-disable-line no-restricted-globals
+            Error.prepareStackTrace = _Error._prepareStackTrace; // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
             this._stack += `\n${this._getInternalStack()}`;
-            Error.prepareStackTrace = prepareStackTrace; // eslint-disable-line no-restricted-globals
+            Error.prepareStackTrace = prepareStackTrace; // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
 
             if (this.error) {
                 this._stack += `\n-> ${this.error.stack || this.error}`;
@@ -45,12 +45,12 @@ const _Error = _make(Error, { // eslint-disable-line no-restricted-globals
     } = {}) {
         let internalError;
 
-        if (Error.captureStackTrace) { // eslint-disable-line no-restricted-globals
+        if (Error.captureStackTrace) { // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
             internalError = {};
-            Error.captureStackTrace(internalError, _Error); // eslint-disable-line no-restricted-globals
+            Error.captureStackTrace(internalError, _Error); // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
         } else {
             try {
-                throw new Error(); // eslint-disable-line no-restricted-globals
+                throw new Error(); // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
             } catch (error) {
                 internalError = error;
             }

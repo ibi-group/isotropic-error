@@ -1,6 +1,6 @@
-import _chai from 'chai';
+import _chai from 'isotropic-dev-dependencies/lib/chai.js';
 import _Error from '../js/error.js';
-import _mocha from 'mocha';
+import _mocha from 'isotropic-dev-dependencies/lib/mocha.js';
 
 _mocha.describe('Error', () => {
     _mocha.it('should construct error objects', () => {

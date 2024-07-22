@@ -10,6 +10,9 @@ const _Error = _make(Error, { // eslint-disable-line no-restricted-globals -- Th
 
         return string;
     },
+    _getCause () {
+        return this.error;
+    },
     _getMessage () {
         return this._message || this.error && this.error.message || void null;
     },
@@ -57,6 +60,9 @@ const _Error = _make(Error, { // eslint-disable-line no-restricted-globals -- Th
         }
 
         Object.defineProperties(this, {
+            cause: {
+                get: this._getCause
+            },
             details: {
                 enumerable: true,
                 value: details

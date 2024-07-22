@@ -12,6 +12,12 @@ _mocha.describe('Error', () => {
 
         _chai.expect(error).to.be.an.instanceOf(_Error);
         _chai.expect(error).to.be.an.instanceOf(Error); // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
+        _chai.expect(Object.keys(error)).to.deep.equal([
+            'details',
+            'error',
+            'message',
+            'name'
+        ]);
     });
 
     _mocha.it('should be an error object factory', () => {
@@ -23,6 +29,36 @@ _mocha.describe('Error', () => {
 
         _chai.expect(error).to.be.an.instanceOf(_Error);
         _chai.expect(error).to.be.an.instanceOf(Error); // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
+        _chai.expect(Object.keys(error)).to.deep.equal([
+            'details',
+            'error',
+            'message',
+            'name'
+        ]);
+    });
+
+    _mocha.describe('#cause', () => {
+        _mocha.it('should be an instance property that reads the inner error value', () => {
+            const error = _Error();
+
+            _chai.expect(_Error({
+                error
+            })).to.have.property('cause', error);
+        });
+
+        _mocha.it('should not be writable', () => {
+            const error = _Error({
+                error: _Error()
+            });
+
+            _chai.expect(() => {
+                error.cause = _Error();
+            }).to.throw();
+        });
+
+        _mocha.it('should be undefined if not provided', () => {
+            _chai.expect(_Error().cause).to.be.undefined;
+        });
     });
 
     _mocha.describe('#details', () => {

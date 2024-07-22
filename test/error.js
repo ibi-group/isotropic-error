@@ -210,6 +210,17 @@ _mocha.describe('Error', () => {
             })).to.have.property('stack').that.matches(/\n-> Error/v);
         });
 
+        _mocha.it('should include inner native error cause', () => {
+            _chai.expect(_Error({
+                error: new Error('Native error', { // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
+                    cause: _Error({
+                        message: 'Inner error'
+                    })
+                }),
+                message: 'Outer error'
+            })).to.have.property('stack').that.matches(/\n-> Error: Inner error/v);
+        });
+
         _mocha.it('should include inner error string', () => {
             _chai.expect(_Error({
                 error: 'inner error string'

@@ -12,6 +12,12 @@ _mocha.describe('Error', () => {
 
         _chai.expect(error).to.be.an.instanceOf(_Error);
         _chai.expect(error).to.be.an.instanceOf(Error); // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
+        _chai.expect(Object.keys(error)).to.deep.equal([
+            'details',
+            'error',
+            'message',
+            'name'
+        ]);
     });
 
     _mocha.it('should be an error object factory', () => {
@@ -23,6 +29,36 @@ _mocha.describe('Error', () => {
 
         _chai.expect(error).to.be.an.instanceOf(_Error);
         _chai.expect(error).to.be.an.instanceOf(Error); // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
+        _chai.expect(Object.keys(error)).to.deep.equal([
+            'details',
+            'error',
+            'message',
+            'name'
+        ]);
+    });
+
+    _mocha.describe('#cause', () => {
+        _mocha.it('should be an instance property that reads the inner error value', () => {
+            const error = _Error();
+
+            _chai.expect(_Error({
+                error
+            })).to.have.property('cause', error);
+        });
+
+        _mocha.it('should not be writable', () => {
+            const error = _Error({
+                error: _Error()
+            });
+
+            _chai.expect(() => {
+                error.cause = _Error();
+            }).to.throw();
+        });
+
+        _mocha.it('should be undefined if not provided', () => {
+            _chai.expect(_Error().cause).to.be.undefined;
+        });
     });
 
     _mocha.describe('#details', () => {
@@ -165,19 +201,30 @@ _mocha.describe('Error', () => {
                 details: {
                     test: 'details'
                 }
-            })).to.have.property('stack').that.matches(/\nDetails: \{\n {4}"test": "details"\n\}/u);
+            })).to.have.property('stack').that.matches(/\nDetails: \{\n {4}"test": "details"\n\}/v);
         });
 
         _mocha.it('should include inner error', () => {
             _chai.expect(_Error({
                 error: _Error()
-            })).to.have.property('stack').that.matches(/\n-> Error/u);
+            })).to.have.property('stack').that.matches(/\n-> Error/v);
+        });
+
+        _mocha.it('should include inner native error cause', () => {
+            _chai.expect(_Error({
+                error: new Error('Native error', { // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
+                    cause: _Error({
+                        message: 'Inner error'
+                    })
+                }),
+                message: 'Outer error'
+            })).to.have.property('stack').that.matches(/\n-> Error: Inner error/v);
         });
 
         _mocha.it('should include inner error string', () => {
             _chai.expect(_Error({
                 error: 'inner error string'
-            })).to.have.property('stack').that.matches(/\n-> inner error string/u);
+            })).to.have.property('stack').that.matches(/\n-> inner error string/v);
         });
 
         _mocha.it('should work without the v8 stack trace api', () => {
@@ -239,7 +286,7 @@ _mocha.describe('Error', () => {
                 'line 0',
                 null,
                 'line 2'
-            ])).to.match(/^ {4}at line 0\n {4}at <error: .*?>\n {4}at line 2$/u);
+            ])).to.match(/^ {4}at line 0\n {4}at <error: .*?>\n {4}at line 2$/v);
         });
 
         _mocha.it('should print "<error>" if it can not stringify the call site object or the thrown error', () => {

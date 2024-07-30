@@ -10,6 +10,9 @@ const _Error = _make(Error, { // eslint-disable-line no-restricted-globals -- Th
 
         return string;
     },
+    _getCause () {
+        return this.error;
+    },
     _getMessage () {
         return this._message || this.error && this.error.message || void null;
     },
@@ -30,8 +33,21 @@ const _Error = _make(Error, { // eslint-disable-line no-restricted-globals -- Th
             this._stack += `\n${this._getInternalStack()}`;
             Error.prepareStackTrace = prepareStackTrace; // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
 
-            if (this.error) {
-                this._stack += `\n-> ${this.error.stack || this.error}`;
+            let innerError = this.error;
+
+            while (innerError) {
+                if (innerError instanceof Error) { // eslint-disable-line no-restricted-globals -- The implementation of isotropic-error requires references to the built-in Error.
+                    this._stack += `\n-> ${innerError.stack}`;
+
+                    if (innerError instanceof _Error) {
+                        break;
+                    }
+
+                    innerError = innerError.cause;
+                } else {
+                    this._stack += `\n-> ${innerError}`;
+                    break;
+                }
             }
         }
 
@@ -57,6 +73,9 @@ const _Error = _make(Error, { // eslint-disable-line no-restricted-globals -- Th
         }
 
         Object.defineProperties(this, {
+            cause: {
+                get: this._getCause
+            },
             details: {
                 enumerable: true,
                 value: details

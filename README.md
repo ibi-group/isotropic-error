@@ -13,6 +13,7 @@ A nestable error object for JavaScript that solves the "stack trace truncation" 
 - **Error Nesting**: Wraps inner errors while maintaining their stack traces
 - **Detailed Context**: Attach additional debugging information at each level
 - **Standard Compatibility**: Works with both native Error causes and custom error objects
+- **Standard Error Detection**: Recognized by both `instanceof Error` and `Error.isError()`
 - **Consistent Formatting**: Standardized error presentation with useful details
 
 ## Installation
@@ -73,7 +74,7 @@ import _Error from 'isotropic-error';
 
 ```javascript
 const error = _Error({
-    details: { /* ... */ }  // Optional: Additional context data
+    details: { /* ... */ }, // Optional: Additional context data
     error: innerError,      // Optional: Nested error object
     message: 'Description', // Optional: Error message
     name: 'ErrorType'       // Optional: Error type name
@@ -90,6 +91,21 @@ Note: When including runtime values in an error, it's best practice to include t
 - **message** (String): The error message
 - **name** (String): The error type name
 - **stack** (String): Combined stack trace of this error and any nested errors
+
+### Error Detection
+
+isotropic-error objects are constructed through the built-in `Error`, so they are recognized by both detection methods, including the standard `Error.isError()` predicate:
+
+```javascript
+import _Error from 'isotropic-error';
+
+const error = _Error({
+    message: 'Something failed'
+});
+
+error instanceof Error; // true
+Error.isError(error); // true
+```
 
 ## Examples
 
@@ -156,7 +172,7 @@ const _level3 = () => {
             details: {
                 level: 3
             },
-            message: 'Something failed at level 3'
+            message: 'Something failed at level 3',
             name: 'Level3Error'
         });
     },
@@ -194,15 +210,21 @@ const _level3 = () => {
 _level1();
 // When _level1() throws, the stack trace will show:
 // Level1Error: Something failed at level 1
-// Details: { "level": 1 }
+// Details: {
+//     level: 1
+// }
 //     at level1 (...)
 //     ...
 // -> Level2Error: Something failed at level 2
-// Details: { "level": 2 }
+// Details: {
+//     level: 2
+// }
 //     at level2 (...)
 //     ...
 // -> Level3Error: Something failed at level 3
-// Details: { "level": 3 }
+// Details: {
+//     level: 3
+// }
 //     at level3 (...)
 //     ...
 ```
@@ -270,6 +292,47 @@ _app.use((error, request, response, next) => {
     }
 });
 ```
+
+### Aggregating Multiple Errors
+
+When several errors need to be reported together (for example, the rejected results of `Promise.allSettled` or a batch of validation failures), collect them in a `details.errors` array. This fills the same role as the native `AggregateError` while preserving the asynchronous stack trace behavior of isotropic-error.
+
+```javascript
+import _Error from 'isotropic-error';
+import _validateRecord from 'somewhere';
+
+const _validateRecords = records => {
+    const errors = records.flatMap((record, index) => {
+        try {
+            _validateRecord(record);
+
+            return [];
+        } catch (error) {
+            return [
+                _Error({
+                    details: {
+                        index
+                    },
+                    error,
+                    message: `Record ${index} is invalid`
+                })
+            ];
+        }
+    });
+
+    if (errors.length) {
+        throw _Error({
+            details: {
+                errors
+            },
+            message: `${errors.length} record(s) failed validation`,
+            name: 'ValidationError'
+        });
+    }
+};
+```
+
+The message, name, and details of every aggregated error are serialized into the combined stack trace, so a single log entry captures each failure with its own context.
 
 ## Contributing
 

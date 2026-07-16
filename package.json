@@ -2,12 +2,12 @@
     "author": "Steven Olmsted <steven.olmsted@ibigroup.com>",
     "bugs": "https://github.com/ibi-group/isotropic-error/issues",
     "dependencies": {
-        "isotropic-make": "~0.13.1",
-        "isotropic-value-to-source": "~0.9.1"
+        "isotropic-make": "~0.14.0",
+        "isotropic-value-to-source": "~0.10.0"
     },
     "description": "A nestable error object with causes, details, and combined stack traces",
     "devDependencies": {
-        "isotropic-dev-dependencies": "~0.3.1"
+        "isotropic-dev-dependencies": "~0.4.0"
     },
     "engines": {
         "node": "^26.5.0",
@@ -38,5 +38,5 @@
         "test": "c8 -c ./node_modules/isotropic-dev-dependencies/config/c8.json node --test"
     },
     "type": "module",
-    "version": "0.13.1"
+    "version": "0.14.0"
 }
